@@ -12,12 +12,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        registry.addResourceHandler("/javascripts/**")
-                .addResourceLocations("classpath:/static/javascripts/")
+        registry.addResourceHandler("/hbs/**")
+                .addResourceLocations("classpath:/static/hbs/")
                 .setCachePeriod(3600*24*7);
 
-        registry.addResourceHandler("/stylesheets/**")
-                .addResourceLocations("classpath:/static/stylesheets/")
+        registry.addResourceHandler("/js/**")
+                .addResourceLocations("classpath:/static/js/")
+                .setCachePeriod(3600*24*7);
+
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath:/static/css/")
                 .setCachePeriod(3600*24*7);
 
         registry.addResourceHandler("/fonts/**")
