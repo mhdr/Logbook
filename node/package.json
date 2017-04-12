@@ -1,0 +1,27 @@
+{
+  "name": "node",
+  "version": "0.0.0",
+  "dependencies": {
+    "animate.css": "*",
+    "awesome-bootstrap-checkbox": "*",
+    "bootstrap": "*",
+    "bootstrap-rtl": "*",
+    "font-awesome": "*",
+    "handlebars": "*",
+    "hover.css": "*",
+    "jquery": "*",
+    "knockout": "*",
+    "moment": "*",
+    "normalize.css": "*",
+    "persian-datepicker": "*",
+    "signals": "*",
+    "string-format": "*",
+    "velocity-animate": "*",
+	"@types/bootstrap": "*",
+	"@types/jquery": "*",
+	"@types/handlebars": "*",
+	"@types/knockout": "*",
+	"@types/moment": "*",
+	"@types/velocity-animate": "*"
+  }
+}

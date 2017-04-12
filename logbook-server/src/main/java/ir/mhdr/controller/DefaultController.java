@@ -1,5 +1,6 @@
 package ir.mhdr.controller;
 
+import ir.mhdr.lib.SessionManager;
 import ir.mhdr.lib.Statics;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ public class DefaultController {
     @RequestMapping("/")
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
 
-        request.getSession(true);
+        SessionManager sessionManager=new SessionManager(request,response);
 
         ModelAndView modelAndView=new ModelAndView("index");
         modelAndView.addObject("version",new Statics().getVersion());
