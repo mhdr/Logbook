@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class DefaultController {
-    @RequestMapping("/")
+
+    @RequestMapping({"/","/admin","/home","/login"})
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
 
         SessionManager sessionManager=new SessionManager(request,response);

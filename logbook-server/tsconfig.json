@@ -3,9 +3,14 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-    "noImplicitAny": true,
-    "noImplicitUseStrict":true,
-    "declaration":true,
-    "removeComments":true
-  }
+    "noImplicitAny": false,
+    "noImplicitUseStrict": true,
+    "declaration": true,
+    "removeComments": true,
+    "diagnostics":true,
+    "pretty": true
+  },
+  "files": [
+    "index.ts"
+  ]
 }

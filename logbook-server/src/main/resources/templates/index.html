@@ -16,6 +16,7 @@
     <script th:src="'js/velocity.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/velocity.ui.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/string-format.min.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'js/index.js?' + ${version}" type="text/javascript"></script>
 </head>
 <body dir="rtl">
 
@@ -32,12 +33,11 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#Home">خانه</a></li>
-                    <li><a href="#Admin">مدیریت</a></li>
+                    <li><a href="home">خانه</a></li>
+                    <li><a href="admin">مدیریت</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="logout"><span class="glyphicon glyphicon-log-out"></span> خروج</a></li>
                 </ul>
             </div>
         </div>
