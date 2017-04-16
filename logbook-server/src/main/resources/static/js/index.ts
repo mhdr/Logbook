@@ -36,14 +36,8 @@ class Debug {
 }
 
 class Browser {
-    static changeUrl(path: string) {
-        history.pushState(null, null, path);
 
-        // on every pushState
-        Browser.renderLocation(path);
-    }
-
-    static renderLocation(path: string) {
+    static renderLocation(path: string,onComplete?:()=>void) {
 
         //Debug.log(path);
 
@@ -53,15 +47,32 @@ class Browser {
                 break;
 
             case "/home":
-                Navbar.swapActiveItem(path);
+                Navbar.swapActiveItem("/home");
+
                 break;
 
             case "/admin":
-                Navbar.swapActiveItem(path);
+
+                let data:SidebarData={
+                    divSideBar:"divSidebarAdmin",
+                    url:"./hbs/sidebar/admin.hbs",
+                    aSideBar:"aUserAdmin"
+                };
+
+                Navbar.swapActiveItem("/admin",()=>{
+                    Sidebar.loadSidebar(data);
+                });
+
                 break;
 
             case "/logout":
-                Navbar.swapActiveItem(path);
+                Navbar.swapActiveItem("/logout");
+                break;
+            case "/admin/user":
+                break;
+            case "/admin/forms":
+                break;
+            case "/admin/machinery":
                 break;
         }
     }
@@ -69,7 +80,7 @@ class Browser {
 
 class Navbar {
 
-    static bind() {
+    static bind(onComplete?:()=>void) {
         let li_items = $("#topMenu").find("li");
 
         //Debug.log(li_items);
@@ -85,17 +96,18 @@ class Navbar {
                 let t = $(a_item).attr("href");
 
                 // on click link
-                Browser.changeUrl("/" + t);
+                history.pushState(null,null,"/" + t);
                 return false;
             });
         });
+
+        onComplete();
     }
 
-    static swapActiveItem(path:string)
-    {
+    static swapActiveItem(path: string,onComplete?:()=>void) {
         let li_items = $("#topMenu").find("li");
-        let a_item=null;
-        path = path.slice(1,path.length);
+        let a_item = null;
+        path = path.slice(1, path.length);
 
         //Debug.log(path);
 
@@ -103,19 +115,83 @@ class Navbar {
 
             let current_a_item = $(li_items[index]).find("a").get(0);
 
-            if ($(current_a_item).attr("href")===path)
-            {
-                a_item=current_a_item;
+            if ($(current_a_item).attr("href") === path) {
+                a_item = current_a_item;
             }
 
-            let current_li=$(li_items[index]);
+            let current_li = $(li_items[index]);
 
             $(current_li).removeClass("active");
         });
 
-        if (a_item!=null)
-        {
+        if (a_item != null) {
             $(a_item).parent().addClass("active");
         }
+
+        onComplete();
     }
+}
+
+class Sidebar {
+    static bind(onComplete?:()=>void)
+    {
+        let a_items=$("#sideBar").find("a");
+
+        $.each(a_items,(index,value)=>{
+            let a_item=a_items[index];
+
+            $(a_item).click(() => {
+
+                let t = $(a_item).attr("href");
+
+                // on click link
+                history.pushState(null,null,"//" + t);
+                return false;
+            });
+        });
+
+        onComplete();
+    }
+
+    static loadSidebar(value:SidebarData,onComplete?:()=>void) {
+        if ($("#" + value.divSideBar).length == 0) {
+            $.ajax({
+                url: value.url,
+                dataType: "text",
+                method: "GET",
+                success: function (data, textStatus, jqXHR) {
+                    $("#sideBar").empty();
+                    let newData=$(data).addClass("animated slideInRight");
+                    $(newData).find("#"+value.aSideBar).addClass("active");
+                    $("#sideBar").append(newData);
+                }
+            });
+        }
+
+        onComplete();
+    }
+
+    static swapActiveItem(id:string,onComplete?:()=>void)
+    {
+        let a_items=$("#sideBar").find("a");
+
+        $.each(a_items,(index,value)=>{
+            let a_item=a_items[index];
+
+            $(a_item).removeClass("active");
+
+            if (a_item.attr("id")===id)
+            {
+                $(a_item).addClass("active");
+            }
+        });
+
+        onComplete();
+    }
+}
+
+interface SidebarData {
+    divSideBar: string;
+    url: string;
+    aSideBar: string;
 }

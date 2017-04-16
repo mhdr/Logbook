@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.springframework.org/schema/data/jaxb">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>سامانه ثبت داده ها</title>
     <link rel='stylesheet' th:href="'css/font-awesome.min.css?' + ${version}"/>
     <link rel='stylesheet' th:href="'css/bootstrap.min.css?' + ${version}"/>
     <link rel='stylesheet' th:href="'css/bootstrap-rtl.min.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'css/animate.min.css?' + ${version}"/>
     <link rel='stylesheet' th:href="'css/index.css?' + ${version}"/>
 
     <script th:src="'js/jquery.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/bootstrap.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/handlebars.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/knockout.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/velocity.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/velocity.ui.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/string-format.min.js?' + ${version}" type="text/javascript"></script>
     <script th:src="'js/index.js?' + ${version}" type="text/javascript"></script>
 </head>
@@ -45,7 +44,8 @@
 </div>
 
 <div id="content" class="container-fluid">
-
+    <div id="sideBar" class="col-lg-2 col-md-2 col-sm-2"></div>
+    <div id="mainBody" class="col-lg-10 col-md-10 col-sm-10"></div>
 </div>
 
 <input type="hidden" id="inputVersion" th:value="${version}"/>

@@ -31,24 +31,32 @@ Debug.DEBUG = true;
 var Browser = (function () {
     function Browser() {
     }
-    Browser.changeUrl = function (path) {
-        history.pushState(null, null, path);
-        // on every pushState
-        Browser.renderLocation(path);
-    };
-    Browser.renderLocation = function (path) {
+    Browser.renderLocation = function (path, onComplete) {
         //Debug.log(path);
         switch (path) {
             case "/":
                 break;
             case "/home":
-                Navbar.swapActiveItem(path);
+                Navbar.swapActiveItem("/home");
                 break;
             case "/admin":
-                Navbar.swapActiveItem(path);
+                var data_1 = {
+                    divSideBar: "divSidebarAdmin",
+                    url: "./hbs/sidebar/admin.hbs",
+                    aSideBar: "aUserAdmin"
+                };
+                Navbar.swapActiveItem("/admin", function () {
+                    Sidebar.loadSidebar(data_1);
+                });
                 break;
             case "/logout":
-                Navbar.swapActiveItem(path);
+                Navbar.swapActiveItem("/logout");
+                break;
+            case "/admin/user":
+                break;
+            case "/admin/forms":
+                break;
+            case "/admin/machinery":
                 break;
         }
     };
@@ -57,7 +65,7 @@ var Browser = (function () {
 var Navbar = (function () {
     function Navbar() {
     }
-    Navbar.bind = function () {
+    Navbar.bind = function (onComplete) {
         var li_items = $("#topMenu").find("li");
         //Debug.log(li_items);
         $.each(li_items, function (index, value) {
@@ -66,12 +74,13 @@ var Navbar = (function () {
             $(a_item).click(function () {
                 var t = $(a_item).attr("href");
                 // on click link
-                Browser.changeUrl("/" + t);
+                history.pushState(null, null, "/" + t);
                 return false;
             });
         });
+        onComplete();
     };
-    Navbar.swapActiveItem = function (path) {
+    Navbar.swapActiveItem = function (path, onComplete) {
         var li_items = $("#topMenu").find("li");
         var a_item = null;
         path = path.slice(1, path.length);
@@ -87,6 +96,52 @@ var Navbar = (function () {
         if (a_item != null) {
             $(a_item).parent().addClass("active");
         }
+        onComplete();
     };
     return Navbar;
+}());
+var Sidebar = (function () {
+    function Sidebar() {
+    }
+    Sidebar.bind = function (onComplete) {
+        var a_items = $("#sideBar").find("a");
+        $.each(a_items, function (index, value) {
+            var a_item = a_items[index];
+            $(a_item).click(function () {
+                var t = $(a_item).attr("href");
+                // on click link
+                history.pushState(null, null, "//" + t);
+                return false;
+            });
+        });
+        onComplete();
+    };
+    Sidebar.loadSidebar = function (value, onComplete) {
+        if ($("#" + value.divSideBar).length == 0) {
+            $.ajax({
+                url: value.url,
+                dataType: "text",
+                method: "GET",
+                success: function (data, textStatus, jqXHR) {
+                    $("#sideBar").empty();
+                    var newData = $(data).addClass("animated slideInRight");
+                    $(newData).find("#" + value.aSideBar).addClass("active");
+                    $("#sideBar").append(newData);
+                }
+            });
+        }
+        onComplete();
+    };
+    Sidebar.swapActiveItem = function (id, onComplete) {
+        var a_items = $("#sideBar").find("a");
+        $.each(a_items, function (index, value) {
+            var a_item = a_items[index];
+            $(a_item).removeClass("active");
+            if (a_item.attr("id") === id) {
+                $(a_item).addClass("active");
+            }
+        });
+        onComplete();
+    };
+    return Sidebar;
 }());

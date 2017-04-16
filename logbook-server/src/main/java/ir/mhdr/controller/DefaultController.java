@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class DefaultController {
 
-    @RequestMapping({"/","/admin","/home","/login"})
+    @RequestMapping({"/","/admin","/home","/login","/admin/user","/admin/forms","/admin/machinery"})
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
 
         SessionManager sessionManager=new SessionManager(request,response);
