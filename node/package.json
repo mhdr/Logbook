@@ -17,11 +17,14 @@
     "signals": "*",
     "string-format": "*",
     "velocity-animate": "*",
+	"async":"*",
+	"routes-js":"*",
 	"@types/bootstrap": "*",
 	"@types/jquery": "*",
 	"@types/handlebars": "*",
 	"@types/knockout": "*",
 	"@types/moment": "*",
-	"@types/velocity-animate": "*"
+	"@types/velocity-animate": "*",
+	"@types/async": "*"
   }
 }
