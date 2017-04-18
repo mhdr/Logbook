@@ -439,7 +439,7 @@ ko.utils = (function () {
                     element.detachEvent(attachEventName, attachEventHandler);
                 });
             } else
-                throw new Error("Browser doesn't support addEventListener or attachEvent");
+                throw new Error("Route doesn't support addEventListener or attachEvent");
         },
 
         triggerEvent: function (element, eventType) {
@@ -468,7 +468,7 @@ ko.utils = (function () {
             } else if (typeof element.fireEvent != "undefined") {
                 element.fireEvent("on" + eventType);
             } else {
-                throw new Error("Browser doesn't support triggering events");
+                throw new Error("Route doesn't support triggering events");
             }
         },
 

@@ -3199,7 +3199,7 @@ jQuery.each( {
             return elem.contentDocument;
         }
 
-        // Support: IE 9 - 11 only, iOS 7 only, Android Browser <=4.3 only
+        // Support: IE 9 - 11 only, iOS 7 only, Android Route <=4.3 only
         // Treat the template element as a regular one in browsers that
         // don't support it.
         if ( nodeName( elem, "template" ) ) {
@@ -6185,7 +6185,7 @@ function curCSS( elem, name, computed ) {
 		}
 
 		// A tribute to the "awesome hack by Dean Edwards"
-		// Android Browser returns percentage for some values,
+		// Android Route returns percentage for some values,
 		// but width seems to be reliably pixels.
 		// This is against the CSSOM draft spec:
 		// https://drafts.csswg.org/cssom/#resolved-values

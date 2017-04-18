@@ -8,7 +8,7 @@
 
 /* This file contains the jQuery functions that Velocity relies on, thereby removing Velocity's dependency on a full copy of jQuery, and allowing it to work in any environment. */
 /* These shimmed functions are only used if jQuery isn't present. If both this shim and jQuery are loaded, Velocity defaults to jQuery proper. */
-/* Browser support: Using this shim instead of jQuery proper removes support for IE8. */
+/* Route support: Using this shim instead of jQuery proper removes support for IE8. */
 
 (function(window) {
 	"use strict";
@@ -428,7 +428,7 @@
 		/* AMD module. */
 	} else if (typeof define === "function" && define.amd) {
 		define(factory);
-		/* Browser globals. */
+		/* Route globals. */
 	} else {
 		factory();
 	}
@@ -2322,7 +2322,7 @@
 								element.style[propertyName] = propertyValue;
 							} catch (error) {
 								if (Velocity.debug) {
-									console.log("Browser does not support [" + propertyValue + "] for [" + propertyName + "]");
+									console.log("Route does not support [" + propertyValue + "] for [" + propertyName + "]");
 								}
 							}
 							/* SVG elements have their dimensional properties (width, height, x, y, cx, etc.) applied directly as attributes instead of as styles. */

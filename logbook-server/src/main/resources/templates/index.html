@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>سامانه ثبت داده ها</title>
-    <link rel='stylesheet' th:href="'css/font-awesome.min.css?' + ${version}"/>
-    <link rel='stylesheet' th:href="'css/bootstrap.min.css?' + ${version}"/>
-    <link rel='stylesheet' th:href="'css/bootstrap-rtl.min.css?' + ${version}"/>
-    <link rel='stylesheet' th:href="'css/animate.min.css?' + ${version}"/>
-    <link rel='stylesheet' th:href="'css/index.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'/css/font-awesome.min.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'/css/bootstrap.min.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'/css/bootstrap-rtl.min.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'/css/animate.min.css?' + ${version}"/>
+    <link rel='stylesheet' th:href="'/css/index.css?' + ${version}"/>
 
-    <script th:src="'js/jquery.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/bootstrap.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/handlebars.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/async.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/string-format.min.js?' + ${version}" type="text/javascript"></script>
-    <script th:src="'js/index.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'/js/jquery.min.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'/js/bootstrap.min.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'/js/knockout.min.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'/js/string-format.min.js?' + ${version}" type="text/javascript"></script>
+    <script th:src="'/js/index.js?' + ${version}" type="text/javascript"></script>
 </head>
 <body dir="rtl">
 
@@ -32,11 +31,15 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="home">خانه</a></li>
-                    <li><a href="admin">مدیریت</a></li>
+                    <li data-bind="css:{active:homeActive}">
+                        <a href="/home" data-bind="click: homeClicked">خانه</a></li>
+                    <li data-bind="css:{active:adminActive}">
+                        <a href="/admin" data-bind="click: adminClicked">مدیریت</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="logout"><span class="glyphicon glyphicon-log-out"></span> خروج</a></li>
+                    <li data-bind="css:{active:logoutActive}">
+                        <a href="/logout" data-bind="click: logoutClicked">
+                            <span class="glyphicon glyphicon-log-out"></span> خروج</a></li>
                 </ul>
             </div>
         </div>

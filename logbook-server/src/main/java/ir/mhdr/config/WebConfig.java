@@ -11,11 +11,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/hbs/**")
-                .addResourceLocations("classpath:/static/hbs/")
-                .setCachePeriod(3600*24*7);
-
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/")
                 .setCachePeriod(3600*24*7);

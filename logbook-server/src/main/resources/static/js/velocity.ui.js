@@ -12,7 +12,7 @@
 		/* AMD module. */
 	} else if (typeof define === "function" && define.amd) {
 		define(["velocity"], factory);
-		/* Browser globals. */
+		/* Route globals. */
 	} else {
 		factory();
 	}

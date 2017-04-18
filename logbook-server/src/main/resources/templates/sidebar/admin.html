@@ -1,0 +1,8 @@
+<div class="list-group animated slideInRight" id="divSidebarAdmin" xmlns:th="http://www.thymeleaf.org">
+    <a href="/admin/users" class="list-group-item" id="aUserAdmin"
+       data-bind="css:{active:usersActive},click: usersClicked" th:classappend="${activeUsers} ? active">کاربران</a>
+    <a href="/admin/forms" class="list-group-item" id="aFormAdmin"
+       data-bind="css:{active:formsActive},click: formsClicked" th:classappend="${activeForms} ? active">فرم ها</a>
+    <a href="/admin/machinery" class="list-group-item" id="aMachineryAdmin"
+       data-bind="css:{active:machineryActive},click: machineryClicked" th:classappend="${activeMachinery} ? active">ماشین آلات</a>
+</div>
