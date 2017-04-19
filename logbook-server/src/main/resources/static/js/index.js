@@ -1,6 +1,7 @@
 ///<reference path="../../DefinitelyTyped/jquery/index.d.ts"/>
 ///<reference path="../../DefinitelyTyped/bootstrap/index.d.ts"/>
 ///<reference path="../../DefinitelyTyped/knockout/index.d.ts"/>
+///<reference path="../../DefinitelyTyped/async/index.d.ts"/>
 window['format'];
 var format;
 $(document).ready(function () {
@@ -60,6 +61,9 @@ ViewModels.sidebar = {
         return false;
     }
 };
+ViewModels.AdminUsers = {
+    users: ko.observableArray()
+};
 var Debug = (function () {
     function Debug() {
     }
@@ -88,42 +92,71 @@ var Route = (function () {
             case "/":
                 break;
             case "/home":
-                Route.renderHome();
+                Navbar.renderHome();
                 break;
             case "/admin":
-                Route.renderAdminUsers();
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminUsers();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+                });
                 break;
             case "/logout":
-                Route.renderLogout();
+                Navbar.renderLogout();
                 break;
             case "/admin/users":
-                Route.renderAdminUsers();
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminUsers();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+                });
                 break;
             case "/admin/forms":
-                Route.renderAdminForms();
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminForms();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+                });
                 break;
             case "/admin/machinery":
-                Route.renderAdminMachinery();
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminMachinery();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+                });
                 break;
         }
     };
-    Route.renderHome = function () {
-        ViewModels.navbar.homeActive(true);
-        ViewModels.navbar.adminActive(false);
-        ViewModels.navbar.logoutActive(false);
-    };
-    Route.renderAdmin = function () {
-        ViewModels.navbar.homeActive(false);
-        ViewModels.navbar.adminActive(true);
-        ViewModels.navbar.logoutActive(false);
-    };
-    Route.renderLogout = function () {
-        ViewModels.navbar.homeActive(false);
-        ViewModels.navbar.adminActive(false);
-        ViewModels.navbar.logoutActive(true);
-    };
-    Route.renderAdminUsers = function () {
-        Route.renderAdmin();
+    return Route;
+}());
+var Sidebar = (function () {
+    function Sidebar() {
+    }
+    Sidebar.renderAdminUsers = function () {
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
@@ -149,8 +182,7 @@ var Route = (function () {
             ViewModels.sidebar.machineryActive(false);
         }
     };
-    Route.renderAdminForms = function () {
-        Route.renderAdmin();
+    Sidebar.renderAdminForms = function () {
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
@@ -176,8 +208,7 @@ var Route = (function () {
             ViewModels.sidebar.machineryActive(false);
         }
     };
-    Route.renderAdminMachinery = function () {
-        Route.renderAdmin();
+    Sidebar.renderAdminMachinery = function () {
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
@@ -203,5 +234,45 @@ var Route = (function () {
             ViewModels.sidebar.machineryActive(true);
         }
     };
-    return Route;
+    return Sidebar;
 }());
+var Navbar = (function () {
+    function Navbar() {
+    }
+    Navbar.renderHome = function () {
+        ViewModels.navbar.homeActive(true);
+        ViewModels.navbar.adminActive(false);
+        ViewModels.navbar.logoutActive(false);
+    };
+    Navbar.renderAdmin = function () {
+        ViewModels.navbar.homeActive(false);
+        ViewModels.navbar.adminActive(true);
+        ViewModels.navbar.logoutActive(false);
+    };
+    Navbar.renderLogout = function () {
+        ViewModels.navbar.homeActive(false);
+        ViewModels.navbar.adminActive(false);
+        ViewModels.navbar.logoutActive(true);
+    };
+    return Navbar;
+}());
+var Content;
+(function (Content) {
+    var Admin = (function () {
+        function Admin() {
+        }
+        Admin.renderUsers = function () {
+            if ($("#divAdminUsers").length == 0) {
+                var parameters = {};
+                $.ajax({
+                    url: "/api/user/get_users",
+                    method: "POST",
+                    data: parameters,
+                    success: function (data, textStatus, jqXHR) {
+                    }
+                });
+            }
+        };
+        return Admin;
+    }());
+})(Content || (Content = {}));

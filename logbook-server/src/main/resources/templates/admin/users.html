@@ -1,0 +1,20 @@
+<div xmlns:th="http://www.thymeleaf.org" id="divAdminUsers" class="animated fadeInDownBig">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>نام</th>
+            <th>نام خانوادگی</th>
+            <th>نام کاربری</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach:users">
+        <tr>
+            <td data-bind="text: firstName"></td>
+            <td data-bind="text: lastName"></td>
+            <td data-bind="text: userName"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

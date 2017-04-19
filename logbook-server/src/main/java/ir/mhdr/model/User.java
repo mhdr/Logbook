@@ -7,17 +7,17 @@ import java.io.Serializable;
 public class User implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    public Long id;
 
-    @Column(nullable = false,name = "userName")
-    private String userName;
+    @Column(nullable = false)
+    public String userName;
 
-    @Column(name = "password",nullable = false)
-    private String password;
+    @Column(nullable = false)
+    public String password;
 
-    @Column(name = "firstName",nullable = false)
-    private String firstName;
+    @Column(nullable = false)
+    public String firstName;
 
-    @Column(name = "lastName",nullable = false)
-    private String lastName;
+    @Column(nullable = false)
+    public String lastName;
 }

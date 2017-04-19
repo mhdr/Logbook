@@ -1,10 +1,10 @@
 ///<reference path="../../DefinitelyTyped/jquery/index.d.ts"/>
 ///<reference path="../../DefinitelyTyped/bootstrap/index.d.ts"/>
 ///<reference path="../../DefinitelyTyped/knockout/index.d.ts"/>
+///<reference path="../../DefinitelyTyped/async/index.d.ts"/>
 
 window['format'];
 let format: any;
-
 
 $(document).ready(() => {
     //Debug.log("document is read : " + location.pathname);
@@ -68,6 +68,10 @@ class ViewModels {
             return false;
         }
     };
+
+    static AdminUsers = {
+        users: ko.observableArray()
+    };
 }
 
 
@@ -98,54 +102,87 @@ class Route {
             case "/":
                 break;
             case "/home":
-                Route.renderHome();
+                Navbar.renderHome();
                 break;
             case "/admin":
-                Route.renderAdminUsers();
+
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminUsers();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+
+                });
+
                 break;
             case "/logout":
-                Route.renderLogout();
+                Navbar.renderLogout();
                 break;
             case "/admin/users":
-                Route.renderAdminUsers();
+
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminUsers();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+
+                });
+
                 break;
             case "/admin/forms":
-                Route.renderAdminForms();
+
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminForms();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+
+                });
+
                 break;
             case "/admin/machinery":
-                Route.renderAdminMachinery();
+
+                async.parallel({
+                    one: function (callback) {
+                        Navbar.renderAdmin();
+                        callback(null, null);
+                    },
+                    two: function (callback) {
+                        Sidebar.renderAdminMachinery();
+                        callback(null, null);
+                    }
+                }, function (err, results) {
+
+                });
                 break;
         }
     }
 
-    static renderHome() {
-        ViewModels.navbar.homeActive(true);
-        ViewModels.navbar.adminActive(false);
-        ViewModels.navbar.logoutActive(false);
-    }
 
+}
 
-    static renderAdmin() {
-        ViewModels.navbar.homeActive(false);
-        ViewModels.navbar.adminActive(true);
-        ViewModels.navbar.logoutActive(false);
-    }
-
-    static renderLogout() {
-        ViewModels.navbar.homeActive(false);
-        ViewModels.navbar.adminActive(false);
-        ViewModels.navbar.logoutActive(true);
-    }
-
+class Sidebar {
     static renderAdminUsers() {
-        Route.renderAdmin();
-
-
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
 
-            let parameters={active:"users"};
+            let parameters = {active: "users"};
 
             $.ajax({
                 url: "/sidebar/admin",
@@ -170,18 +207,14 @@ class Route {
             ViewModels.sidebar.formsActive(false);
             ViewModels.sidebar.machineryActive(false);
         }
-
     }
 
     static renderAdminForms() {
-        Route.renderAdmin();
-
-
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
 
-            let parameters={active:"forms"};
+            let parameters = {active: "forms"};
 
             $.ajax({
                 url: "/sidebar/admin",
@@ -206,17 +239,14 @@ class Route {
             ViewModels.sidebar.formsActive(true);
             ViewModels.sidebar.machineryActive(false);
         }
-
     }
 
     static renderAdminMachinery() {
-        Route.renderAdmin();
-
         if ($("#divSidebarAdmin").length == 0) {
             ko.cleanNode(document.getElementById("sideBar"));
             $("#sideBar").empty();
 
-            let parameters={active:"machinery"};
+            let parameters = {active: "machinery"};
 
             $.ajax({
                 url: "/sidebar/admin",
@@ -241,6 +271,48 @@ class Route {
             ViewModels.sidebar.usersActive(false);
             ViewModels.sidebar.formsActive(false);
             ViewModels.sidebar.machineryActive(true);
+        }
+    }
+}
+
+class Navbar {
+    static renderHome() {
+        ViewModels.navbar.homeActive(true);
+        ViewModels.navbar.adminActive(false);
+        ViewModels.navbar.logoutActive(false);
+    }
+
+
+    static renderAdmin() {
+        ViewModels.navbar.homeActive(false);
+        ViewModels.navbar.adminActive(true);
+        ViewModels.navbar.logoutActive(false);
+    }
+
+    static renderLogout() {
+        ViewModels.navbar.homeActive(false);
+        ViewModels.navbar.adminActive(false);
+        ViewModels.navbar.logoutActive(true);
+    }
+}
+
+namespace Content {
+    class Admin {
+        static renderUsers() {
+            if ($("#divAdminUsers").length == 0) {
+
+                let parameters = {};
+
+                $.ajax({
+                    url: "/api/user/get_users",
+                    method: "POST",
+                    data: parameters,
+                    success: function (data, textStatus, jqXHR) {
+
+                    }
+                });
+
+            }
         }
     }
 }
