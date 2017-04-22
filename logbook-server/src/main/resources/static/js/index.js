@@ -61,8 +61,10 @@ ViewModels.sidebar = {
         return false;
     }
 };
-ViewModels.AdminUsers = {
-    users: ko.observableArray()
+ViewModels.adminUsers = {
+    users: ko.observableArray(),
+    showNavbarLoading: ko.observable(false),
+    disableInactiveButtons: ko.observable(true)
 };
 var Debug = (function () {
     function Debug() {
@@ -95,58 +97,60 @@ var Route = (function () {
                 Navbar.renderHome();
                 break;
             case "/admin":
-                async.parallel({
-                    one: function (callback) {
+                async.parallel([
+                    function (callback) {
                         Navbar.renderAdmin();
-                        callback(null, null);
+                        callback(null, "one");
                     },
-                    two: function (callback) {
+                    function (callback) {
                         Sidebar.renderAdminUsers();
-                        callback(null, null);
+                        callback(null, "two");
                     }
-                }, function (err, results) {
+                ], function (err, results) {
+                    Content.Admin.renderUsers();
                 });
                 break;
             case "/logout":
                 Navbar.renderLogout();
                 break;
             case "/admin/users":
-                async.parallel({
-                    one: function (callback) {
+                async.parallel([
+                    function (callback) {
                         Navbar.renderAdmin();
-                        callback(null, null);
+                        callback(null, "one");
                     },
-                    two: function (callback) {
+                    function (callback) {
                         Sidebar.renderAdminUsers();
-                        callback(null, null);
+                        callback(null, "two");
                     }
-                }, function (err, results) {
+                ], function (err, results) {
+                    Content.Admin.renderUsers();
                 });
                 break;
             case "/admin/forms":
-                async.parallel({
-                    one: function (callback) {
+                async.parallel([
+                    function (callback) {
                         Navbar.renderAdmin();
-                        callback(null, null);
+                        callback(null, "one");
                     },
-                    two: function (callback) {
+                    function (callback) {
                         Sidebar.renderAdminForms();
-                        callback(null, null);
+                        callback(null, "two");
                     }
-                }, function (err, results) {
+                ], function (err, results) {
                 });
                 break;
             case "/admin/machinery":
-                async.parallel({
-                    one: function (callback) {
+                async.parallel([
+                    function (callback) {
                         Navbar.renderAdmin();
-                        callback(null, null);
+                        callback(null, "one");
                     },
-                    two: function (callback) {
+                    function (callback) {
                         Sidebar.renderAdminMachinery();
-                        callback(null, null);
+                        callback(null, "two");
                     }
-                }, function (err, results) {
+                ], function (err, results) {
                 });
                 break;
         }
@@ -162,7 +166,7 @@ var Sidebar = (function () {
             $("#sideBar").empty();
             var parameters = { active: "users" };
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -188,7 +192,7 @@ var Sidebar = (function () {
             $("#sideBar").empty();
             var parameters = { active: "forms" };
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -214,7 +218,7 @@ var Sidebar = (function () {
             $("#sideBar").empty();
             var parameters = { active: "machinery" };
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -263,16 +267,40 @@ var Content;
         }
         Admin.renderUsers = function () {
             if ($("#divAdminUsers").length == 0) {
-                var parameters = {};
-                $.ajax({
-                    url: "/api/user/get_users",
-                    method: "POST",
-                    data: parameters,
-                    success: function (data, textStatus, jqXHR) {
+                ko.cleanNode(document.getElementById("mainBody"));
+                async.waterfall([
+                    function (callback) {
+                        var parameters1 = {};
+                        $.ajax({
+                            url: "/templates/admin/users",
+                            method: "POST",
+                            data: parameters1,
+                            success: function (data, textStatus, jqXHR) {
+                                $("#mainBody").empty();
+                                $("#mainBody").append(data);
+                                ko.applyBindings(ViewModels.adminUsers, document.getElementById("mainBody"));
+                                callback(null, "one");
+                            }
+                        });
+                    }, function (arg1, callback) {
+                        var parameters2 = {};
+                        $.ajax({
+                            url: "/api/user/get_users",
+                            method: "POST",
+                            data: parameters2,
+                            success: function (data, textStatus, jqXHR) {
+                                if (data.error === 0) {
+                                    ViewModels.adminUsers.users(data.users);
+                                }
+                                callback(null, "two");
+                            }
+                        });
                     }
+                ], function (err, results) {
                 });
             }
         };
         return Admin;
     }());
+    Content.Admin = Admin;
 })(Content || (Content = {}));

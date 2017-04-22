@@ -13,38 +13,48 @@ import java.util.Map;
 @Controller
 public class PartialController {
 
-    @RequestMapping("/sidebar/admin")
-    public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping("/templates/sidebar/admin")
+    public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) {
 
-        SessionManager sessionManager=new SessionManager(request,response);
+        SessionManager sessionManager = new SessionManager(request, response);
 
         Map<String, String[]> data = request.getParameterMap();
 
         String active = data.get("active")[0];
 
-        boolean activeUsers=false;
-        boolean activeForms=false;
-        boolean activeMachinery=false;
+        boolean activeUsers = false;
+        boolean activeForms = false;
+        boolean activeMachinery = false;
 
-        switch (active)
-        {
+        switch (active) {
             case "users":
-                activeUsers=true;
+                activeUsers = true;
                 break;
             case "forms":
-                activeForms=true;
+                activeForms = true;
                 break;
             case "machinery":
-                activeMachinery=true;
+                activeMachinery = true;
                 break;
         }
 
-        ModelAndView modelAndView=new ModelAndView("sidebar/admin");
-        modelAndView.addObject("version",new Statics().getVersion());
-        modelAndView.addObject("activeUsers",activeUsers);
-        modelAndView.addObject("activeForms",activeForms);
-        modelAndView.addObject("activeMachinery",activeMachinery);
+        ModelAndView modelAndView = new ModelAndView("sidebar/admin");
+        modelAndView.addObject("version", new Statics().getVersion());
+        modelAndView.addObject("activeUsers", activeUsers);
+        modelAndView.addObject("activeForms", activeForms);
+        modelAndView.addObject("activeMachinery", activeMachinery);
         return modelAndView;
     }
 
+    @RequestMapping("/templates/admin/users")
+    public ModelAndView adminUsers(HttpServletRequest request, HttpServletResponse response) {
+
+        SessionManager sessionManager = new SessionManager(request, response);
+
+        Map<String, String[]> data = request.getParameterMap();
+
+        ModelAndView modelAndView = new ModelAndView("admin/users");
+        modelAndView.addObject("version", new Statics().getVersion());
+        return modelAndView;
+    }
 }

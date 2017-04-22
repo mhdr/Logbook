@@ -28,3 +28,15 @@ body {
 .navbar {
   border-radius: 0 !important;
 }
+
+.disable-a {
+  pointer-events: none;
+}
+
+.disable-li {
+  cursor: not-allowed;
+}
+
+.hand {
+  cursor: pointer;
+}

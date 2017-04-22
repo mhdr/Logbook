@@ -69,8 +69,10 @@ class ViewModels {
         }
     };
 
-    static AdminUsers = {
-        users: ko.observableArray()
+    static adminUsers = {
+        users: ko.observableArray(),
+        showNavbarLoading:ko.observable(false),
+        disableInactiveButtons:ko.observable(true)
     };
 }
 
@@ -106,18 +108,19 @@ class Route {
                 break;
             case "/admin":
 
-                async.parallel({
-                    one: function (callback) {
-                        Navbar.renderAdmin();
-                        callback(null, null);
-                    },
-                    two: function (callback) {
-                        Sidebar.renderAdminUsers();
-                        callback(null, null);
-                    }
-                }, function (err, results) {
-
-                });
+                async.parallel([
+                        function (callback) {
+                            Navbar.renderAdmin();
+                            callback(null, "one");
+                        },
+                        function (callback) {
+                            Sidebar.renderAdminUsers();
+                            callback(null, "two");
+                        }
+                    ],
+                    function (err, results) {
+                        Content.Admin.renderUsers();
+                    });
 
                 break;
             case "/logout":
@@ -125,50 +128,53 @@ class Route {
                 break;
             case "/admin/users":
 
-                async.parallel({
-                    one: function (callback) {
-                        Navbar.renderAdmin();
-                        callback(null, null);
-                    },
-                    two: function (callback) {
-                        Sidebar.renderAdminUsers();
-                        callback(null, null);
-                    }
-                }, function (err, results) {
-
-                });
+                async.parallel([
+                        function (callback) {
+                            Navbar.renderAdmin();
+                            callback(null, "one");
+                        },
+                        function (callback) {
+                            Sidebar.renderAdminUsers();
+                            callback(null, "two");
+                        }
+                    ],
+                    function (err, results) {
+                        Content.Admin.renderUsers();
+                    });
 
                 break;
             case "/admin/forms":
 
-                async.parallel({
-                    one: function (callback) {
-                        Navbar.renderAdmin();
-                        callback(null, null);
-                    },
-                    two: function (callback) {
-                        Sidebar.renderAdminForms();
-                        callback(null, null);
-                    }
-                }, function (err, results) {
+                async.parallel([
+                        function (callback) {
+                            Navbar.renderAdmin();
+                            callback(null, "one");
+                        },
+                        function (callback) {
+                            Sidebar.renderAdminForms();
+                            callback(null, "two");
+                        }
+                    ],
+                    function (err, results) {
 
-                });
+                    });
 
                 break;
             case "/admin/machinery":
 
-                async.parallel({
-                    one: function (callback) {
-                        Navbar.renderAdmin();
-                        callback(null, null);
-                    },
-                    two: function (callback) {
-                        Sidebar.renderAdminMachinery();
-                        callback(null, null);
-                    }
-                }, function (err, results) {
+                async.parallel([
+                        function (callback) {
+                            Navbar.renderAdmin();
+                            callback(null, "one");
+                        },
+                        function (callback) {
+                            Sidebar.renderAdminMachinery();
+                            callback(null, "two");
+                        }
+                    ],
+                    function (err, results) {
 
-                });
+                    });
                 break;
         }
     }
@@ -185,7 +191,7 @@ class Sidebar {
             let parameters = {active: "users"};
 
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -217,7 +223,7 @@ class Sidebar {
             let parameters = {active: "forms"};
 
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -249,7 +255,7 @@ class Sidebar {
             let parameters = {active: "machinery"};
 
             $.ajax({
-                url: "/sidebar/admin",
+                url: "/templates/sidebar/admin",
                 method: "POST",
                 data: parameters,
                 success: function (data, textStatus, jqXHR) {
@@ -297,21 +303,50 @@ class Navbar {
 }
 
 namespace Content {
-    class Admin {
+    export class Admin {
         static renderUsers() {
             if ($("#divAdminUsers").length == 0) {
 
-                let parameters = {};
+                ko.cleanNode(document.getElementById("mainBody"));
 
-                $.ajax({
-                    url: "/api/user/get_users",
-                    method: "POST",
-                    data: parameters,
-                    success: function (data, textStatus, jqXHR) {
+                async.waterfall([
+                        function (callback) {
+                            let parameters1 = {};
 
-                    }
-                });
+                            $.ajax({
+                                url: "/templates/admin/users",
+                                method: "POST",
+                                data: parameters1,
+                                success: function (data, textStatus, jqXHR) {
+                                    $("#mainBody").empty();
+                                    $("#mainBody").append(data);
 
+                                    ko.applyBindings(ViewModels.adminUsers, document.getElementById("mainBody"));
+
+                                    callback(null, "one");
+                                }
+                            });
+                        }, function (arg1,callback) {
+                            let parameters2 = {};
+
+                            $.ajax({
+                                url: "/api/user/get_users",
+                                method: "POST",
+                                data: parameters2,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.error===0)
+                                    {
+                                        ViewModels.adminUsers.users(data.users);
+                                    }
+
+                                    callback(null, "two");
+                                }
+                            });
+                        }
+                    ],
+                    function (err, results) {
+
+                    });
             }
         }
     }

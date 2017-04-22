@@ -20,6 +20,22 @@ public class UsersBL{
         this.userRepository=userRepository;
     }
 
+    public Map<String,Object> addIsSelectedToUsers(Map obj)
+    {
+        Map<String, Object> result = new HashMap<>();
+        HashMap<String, Object> obj1 = (HashMap<String, Object>) obj;
+        ArrayList<Map<String, String>> usersMap = (ArrayList<Map<String, String>>) obj1.get("users");
+
+        for (Map<String,String> u:usersMap)
+        {
+            u.put("isSelected","0");
+        }
+
+        result.put("users", usersMap);
+        result.put("error", obj.get("error"));
+        return result;
+    }
+
     public Map<String, Object> getUsers() {
         Map<String, Object> result = new HashMap<>();
 
