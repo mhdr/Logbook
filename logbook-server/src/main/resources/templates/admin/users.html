@@ -5,12 +5,13 @@
             <div class="container-fluid">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a class="center-block hand">
+                        <a class="center-block hand" data-bind="click:newUserClicked">
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
                         <span>کاربر جدید</span>
                     </a></li>
                     <li data-bind="css:{'disable-li':disableInactiveButtons}">
-                        <a class="center-block" data-bind="css:{'disable-a':disableInactiveButtons,hand:!disableInactiveButtons()}">
+                        <a class="center-block"
+                           data-bind="css:{'disable-a':disableInactiveButtons,hand:!disableInactiveButtons()}">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         <span>ویرایش</span>
                     </a></li>
@@ -31,16 +32,12 @@
                         <span><i class="fa fa-key" aria-hidden="true"></i></span>
                         <span>دسترسی ها</span>
                     </a></li>
-
-                    <li><a class="center-block" data-bind="visible: showNavbarLoading">
-                        <span><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                    </a></li>
                 </ul>
             </div>
         </nav>
     </div>
 
-    <table class="table table-hover">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>نام</th>
@@ -49,12 +46,14 @@
         </tr>
         </thead>
         <tbody data-bind="foreach:users">
-        <tr data-bind="css : {warning : isSelected}">
+        <tr data-bind="css : {warning : isSelected},click:$parent.rowClicked">
             <td data-bind="text: firstName"></td>
             <td data-bind="text: lastName"></td>
             <td data-bind="text: userName"></td>
         </tr>
         </tbody>
     </table>
+
+    <div th:replace="admin/modalNewUser"></div>
 
 </div>

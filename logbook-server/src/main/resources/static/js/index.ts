@@ -71,8 +71,37 @@ class ViewModels {
 
     static adminUsers = {
         users: ko.observableArray(),
-        showNavbarLoading:ko.observable(false),
-        disableInactiveButtons:ko.observable(true)
+        disableInactiveButtons: ko.observable(true),
+        selectedUser: ko.observable(),
+        rowClicked: function (user) {
+
+            let usersClone = [];
+
+            for (let i: number = 0; i < ViewModels.adminUsers.users().length; i++) {
+                let current: any = ViewModels.adminUsers.users()[i];
+
+                if (current.id === user.id) {
+                    current.isSelected = true;
+                    ViewModels.adminUsers.selectedUser(current);
+                    ViewModels.adminUsers.disableInactiveButtons(false);
+                }
+                else {
+                    current.isSelected = false;
+                }
+
+                usersClone.push(current);
+            }
+
+            ViewModels.adminUsers.users.removeAll();
+            ViewModels.adminUsers.users(usersClone);
+        },
+        newUserClicked: function () {
+            async.parallel([function (callback) {
+                $("#modalNewUser").modal("show");
+                callback(null,"one");
+            }]);
+
+        }
     };
 }
 
@@ -305,7 +334,7 @@ class Navbar {
 namespace Content {
     export class Admin {
         static renderUsers() {
-            if ($("#divAdminUsers").length == 0) {
+            if ($("#divAdminUsers").length === 0) {
 
                 ko.cleanNode(document.getElementById("mainBody"));
 
@@ -326,7 +355,7 @@ namespace Content {
                                     callback(null, "one");
                                 }
                             });
-                        }, function (arg1,callback) {
+                        }, function (arg1, callback) {
                             let parameters2 = {};
 
                             $.ajax({
@@ -334,8 +363,7 @@ namespace Content {
                                 method: "POST",
                                 data: parameters2,
                                 success: function (data, textStatus, jqXHR) {
-                                    if (data.error===0)
-                                    {
+                                    if (data.error === 0) {
                                         ViewModels.adminUsers.users(data.users);
                                     }
 

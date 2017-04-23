@@ -27,7 +27,7 @@ public class ApiController {
         Map result=null;
 
         UsersBL usersBL=new UsersBL(request,response,userRepository);
-        result=usersBL.addIsSelectedToUsers(usersBL.getUsers());
+        result=usersBL.koGetUsers(usersBL.getUsers());
 
         return result;
     }

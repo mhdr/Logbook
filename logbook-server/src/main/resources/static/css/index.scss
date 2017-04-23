@@ -19,6 +19,10 @@
   font-style: normal
 }
 
+html{
+  overflow-x:hidden;
+}
+
 body {
   direction: rtl;
   text-align: right;
@@ -39,4 +43,18 @@ body {
 
 .hand {
   cursor: pointer;
+}
+
+button:focus, .button:focus {
+  outline: none !important;
+}
+
+.ltr {
+  text-align: left;
+  direction: ltr;
+}
+
+.rtl {
+  text-align: right;
+  direction: rtl;
 }

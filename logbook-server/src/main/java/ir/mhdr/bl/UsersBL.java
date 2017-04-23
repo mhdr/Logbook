@@ -20,15 +20,15 @@ public class UsersBL{
         this.userRepository=userRepository;
     }
 
-    public Map<String,Object> addIsSelectedToUsers(Map obj)
+    public Map<String,Object> koGetUsers(Map obj)
     {
         Map<String, Object> result = new HashMap<>();
         HashMap<String, Object> obj1 = (HashMap<String, Object>) obj;
-        ArrayList<Map<String, String>> usersMap = (ArrayList<Map<String, String>>) obj1.get("users");
+        ArrayList<Map<String, Object>> usersMap = (ArrayList<Map<String, Object>>) obj1.get("users");
 
-        for (Map<String,String> u:usersMap)
+        for (Map<String,Object> u:usersMap)
         {
-            u.put("isSelected","0");
+            u.put("isSelected",false);
         }
 
         result.put("users", usersMap);
@@ -40,7 +40,7 @@ public class UsersBL{
         Map<String, Object> result = new HashMap<>();
 
         try {
-            ArrayList<Map<String, String>> usersMap = new ArrayList<Map<String, String>>();
+            ArrayList<Map<String, Object>> usersMap = new ArrayList<Map<String, Object>>();
 
             List<User> users= userRepository.findAll();
 
@@ -51,7 +51,7 @@ public class UsersBL{
                     continue;
                 }
 
-                Map<String, String> mUser = new HashMap<String, String>();
+                Map<String, Object> mUser = new HashMap<String, Object>();
 
                 mUser.put("id", String.valueOf(user.id));
                 mUser.put("userName", user.userName);

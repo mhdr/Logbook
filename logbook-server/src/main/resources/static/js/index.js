@@ -63,8 +63,31 @@ ViewModels.sidebar = {
 };
 ViewModels.adminUsers = {
     users: ko.observableArray(),
-    showNavbarLoading: ko.observable(false),
-    disableInactiveButtons: ko.observable(true)
+    disableInactiveButtons: ko.observable(true),
+    selectedUser: ko.observable(),
+    rowClicked: function (user) {
+        var usersClone = [];
+        for (var i = 0; i < ViewModels.adminUsers.users().length; i++) {
+            var current = ViewModels.adminUsers.users()[i];
+            if (current.id === user.id) {
+                current.isSelected = true;
+                ViewModels.adminUsers.selectedUser(current);
+                ViewModels.adminUsers.disableInactiveButtons(false);
+            }
+            else {
+                current.isSelected = false;
+            }
+            usersClone.push(current);
+        }
+        ViewModels.adminUsers.users.removeAll();
+        ViewModels.adminUsers.users(usersClone);
+    },
+    newUserClicked: function () {
+        async.parallel([function (callback) {
+                $("#modalNewUser").modal("show");
+                callback(null, "one");
+            }]);
+    }
 };
 var Debug = (function () {
     function Debug() {
@@ -266,7 +289,7 @@ var Content;
         function Admin() {
         }
         Admin.renderUsers = function () {
-            if ($("#divAdminUsers").length == 0) {
+            if ($("#divAdminUsers").length === 0) {
                 ko.cleanNode(document.getElementById("mainBody"));
                 async.waterfall([
                     function (callback) {

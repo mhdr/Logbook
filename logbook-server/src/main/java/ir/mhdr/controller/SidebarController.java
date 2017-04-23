@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-public class PartialController {
-
+public class SidebarController {
     @RequestMapping("/templates/sidebar/admin")
     public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) {
 
@@ -43,18 +42,6 @@ public class PartialController {
         modelAndView.addObject("activeUsers", activeUsers);
         modelAndView.addObject("activeForms", activeForms);
         modelAndView.addObject("activeMachinery", activeMachinery);
-        return modelAndView;
-    }
-
-    @RequestMapping("/templates/admin/users")
-    public ModelAndView adminUsers(HttpServletRequest request, HttpServletResponse response) {
-
-        SessionManager sessionManager = new SessionManager(request, response);
-
-        Map<String, String[]> data = request.getParameterMap();
-
-        ModelAndView modelAndView = new ModelAndView("admin/users");
-        modelAndView.addObject("version", new Statics().getVersion());
         return modelAndView;
     }
 }
